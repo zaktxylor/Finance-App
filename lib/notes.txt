@@ -1,0 +1,129 @@
+i need to make two seperate databases. expenses will populate one of them and income will populate the other.
+request them to either input it in the (name, amount) format or take it seperately and then use string indexing.
+
+
+make the button of "add expense" pop up saving each expense in the database to be displayed and then split 
+using ',' indexing to find second item and int it for the final result. 
+
+bar can fill by doing (total/goal) = decimal that decimal in used to populate the progress bar. 
+above the bar display the amount. Along with this show two columns below with the most recent 5 expenses and
+income. 
+
+
+
+/* Future getNameAddress() async {
+try {
+  final doc = await db.collection('users').doc(widget.uid).collection('goal').doc('goal').get();
+  
+  if (doc.exists) {
+    final data = doc.data() as String;
+    
+    // Now you can use the data variable
+    String goal = data;
+    
+     Align(
+              alignment: Alignment(-0.0, -0.8),
+              child:Text(
+                  goal,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.clip,
+                  style:  TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 34,
+                    color: Color(0xffffffff),
+                  ),
+                ),
+     );
+  } else {
+    print('Document does not exist');
+  }
+} catch (e) {
+  print("Error getting document: $e");
+}
+}  */
+
+
+
+
+
+
+
+
+
+Future<void> _createUser() async {
+
+  final goal = {
+  'goal(current)' : int.parse(_goal.text),
+  'Expense': [],
+  'expense(index)' : [],
+  'expense(value)': [],
+  'Income': [],
+  'Income(Value)':[],
+  'Income(index)' : [],
+};  
+
+if (new_emailController.text.isEmpty ||
+      new_passwordController.text.isEmpty ||
+      _passwordCheck.text.isEmpty ||
+      _goal.text.isEmpty) {
+    // Display an error message or handle the case where fields are empty.
+    print("bad values");
+    pass = true;
+    pass_check = true;
+    email = true;
+    value = true;
+    setState(() {
+      
+    });
+  }
+
+if (new_passwordController.text == _passwordCheck.text) {
+  try {
+        UserCredential newUser = await _auth.createUserWithEmailAndPassword(
+          email: new_emailController.text,
+          password: new_passwordController.text, 
+        );
+         print("User signed in: ${newUser.user!.uid}");
+      String user =  newUser.user!.uid;
+      FirebaseFirestore.instance
+      .collection('users')
+      .doc(user)
+      .set(goal);  //update for a new field, create dict elsewhere populate with variable
+
+       Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home(uid: user)),
+            );
+      new_emailController.clear();
+      new_passwordController.clear();
+      _passwordCheck.clear();
+      _goal.clear();
+      
+  }catch (e) {
+      print("Failed to sign in: $e");
+    email = true;
+    pass = true;
+    value = true;
+    new_emailController.clear();
+    new_passwordController.clear();
+    _passwordCheck.clear();
+    _goal.clear();
+      setState(() {
+        
+      });
+      // Handle the error, e.g., show a snackbar or display an error message
+    }
+  }
+  else{print('wrong password');
+    pass_check = true;
+    new_emailController.clear();
+    new_passwordController.clear();
+    _passwordCheck.clear();
+    _goal.clear();
+  setState(() {
+    
+  });
+  }
+
+  }
